@@ -1,14 +1,16 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <cstdio>
+#include <ctime>
+#include <cstdlib>
 #include <cmath>
 using namespace std;
 
 struct chara{
     int x = 0;
     int y = 0;
-    float health, damage
+    float health = 0; 
+    float damage;
 };
 
 chara robot;
@@ -19,102 +21,102 @@ void move(){
     string direction;
     do{
         // U D L R
-        cout << "Masukkan arah gerak:  ";
+        cout << "Masukkan arah gerak: ";
         cin >> direction;
 
-        if(direction == 85 || direction == 117){
-            if((robot.y + 1 != cockroach.y) && (robot.y != 99)){
+        if(direction == "U" || direction == "u"){
+            if((robot.y + 1 == cockroach.y ) && (robot.x == cockroach.x)){
+                cout << "Menabrak kecoak\n";
+            }
+            else if(robot.y == 100){
+                cout << "Keluar bidang\n";
+            }
+            else{
                 robot.y ++;
                 moved = true;
             }
-            else{
-                if(robot.y + 1 == cockroach.y){
-                    cout << "Menabrak kecoak";
-                }
-                else{
-                    cout << "Keluar bidang";
-                }
-            }
         }
-        else if(direction == 68 || direction == 100){
-            if((robot.y - 1 != cockroach.y) && (robot.y != 0)){
+        else if(direction == "D" || direction == "d"){
+            if((robot.y - 1 == cockroach.y ) && (robot.x == cockroach.x)){
+                cout << "Menabrak kecoak\n";
+            }
+            else if(robot.y == 0){
+                cout << "Keluar bidang\n";
+            }
+            else{
                 robot.y --;
                 moved = true;
             }
-            else{
-                if(robot.y - 1 == cockroach.y){
-                    cout << "Menabrak kecoak";
-                }
-                else{
-                    cout << "Keluar bidang";
-                }
-            }
         }
-        else if(direction == 76 || direction == 108){
-            if((robot.x - 1 != cockroach.x) && (robot.x != 0)){
+        else if(direction == "L" || direction == "l"){
+            if((robot.x - 1 == cockroach.x ) && (robot.y == cockroach.y)){
+                cout << "Menabrak kecoak\n";
+            }
+            else if(robot.x == 0){
+                cout << "Keluar bidang\n";
+            }
+            else{
                 robot.x --;
                 moved = true;
             }
-            else{
-                if(robot.x - 1 == cockroach.x){
-                    cout << "Menabrak kecoak";
-                }
-                else{
-                    cout << "Keluar bidang";
-                }
-            }
         }
-        else if(direction == 82 || direction == 114){
-            if((robot.x + 1 != cockroach.x) && (robot.x != 99)){
+        else if(direction == "R" || direction == "r"){
+            if((robot.x + 1 == cockroach.x ) && (robot.y == cockroach.y)){
+                cout << "Menabrak kecoak\n";
+            }
+            else if(robot.x == 100){
+                cout << "Keluar bidang\n";
+            }
+            else{
                 robot.x ++;
                 moved = true;
             }
-            else{
-                if(robot.x + 1 == cockroach.x){
-                    cout << "Menabrak kecoak";
-                }
-                else{
-                    cout << "Keluar bidang";
-                }
-            }
         }
         else{
-            cout << "Masukan tidak valid";
+            cout << "Masukan tidak valid\n";
         }
     }
+    while(!moved);
+    cout << robot.x << " " << robot.y << endl;
 }
 
-bool shoot(int range, int distance){
+void shoot(int range, int distance){
     if(distance <= range){
         cockroach.health -= robot.damage;
-        return true;
     }
     else{
-        cout << "Out of range" ;
-        return false;
+        cout << "Out of range\n" ;
     }
 }
 
+
 int main(){
-   
+    srand((unsigned) time(0));
     int count = 0;
     // Asumsi health 10, damage = 2
     robot.health = 10;
     robot.damage = 2;
-
-    while(robot.health != 0){
+    bool finish = false;
+    while(robot.health > 0){
         // Asumsi maksimal papan 100
-        while(cockroach.x == 0 && cockroach.y == 0){        
-            cockroach.x = rand() % 101;
-            cockroach.y = rand() % 101;
+        if(cockroach.health <= 0){
+            while(cockroach.x == robot.x && cockroach.y == robot.y ){        
+                cockroach.x = rand() % 10;
+                cockroach.y = rand() % 10;
+            }
+            cockroach.health = (rand() %  6) + 1;
         }
+        cout << cockroach.x << " " << cockroach.y << endl;
+        float distance = sqrt(pow((cockroach.x - robot.x), 2) + pow((cockroach.y - robot.y), 2));
         cockroach.damage = 1;
-        cockroach.health = rand() % 2 6;
         // Jarak diasumsikan berupa jarak terdekat yang dapat berupa diagonal
-
 
         int range = 2;
 
+        if(distance <= range){
+            robot.health -= cockroach.damage;
+        }
+        cout << cockroach.health << " " << robot.health <<  endl;
         //Input pertama
         string command;
         bool valid = false;
@@ -126,19 +128,31 @@ int main(){
             }
             cout << "Silahkan masukkan komando: ";
             cin >> command;
-            if(command == 77 || command == 109){
+            if(command == "M" || command == "m"){
                 move();
                 valid = true;
             } 
-            else if(command == 83 || command == 115){
+            else if(command == "S" || command == "s"){
                 shoot(range, distance);
+                cout << cockroach.health << endl;
+                if(cockroach.health == 0){
+                    count ++;
+                }
+                valid = true;
+            }
+            else if (command == "END"){
+                finish = true;
                 valid = true;
             }
             else{
-                cout << "Perintah tidak terdefinisi";
+                cout << "Perintah tidak terdefinisi \n";
             }
+        }
         while(!valid);
-        
-    }
 
+        if(finish){
+            break;
+        }
+    }
+    cout << "Jumlah kecoak dibunuh: " << count << endl;
 }
