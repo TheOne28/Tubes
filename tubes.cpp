@@ -84,8 +84,15 @@ void move(){
     }
 }
 
-void shoot(int range, int distance){
-
+bool shoot(int range, int distance){
+    if(distance <= range){
+        cockroach.health -= robot.damage;
+        return true;
+    }
+    else{
+        cout << "Out of range" ;
+        return false;
+    }
 }
 
 int main(){
@@ -124,8 +131,7 @@ int main(){
                 valid = true;
             } 
             else if(command == 83 || command == 115){
-                count = shoot(range, distance);
-                
+                shoot(range, distance);
                 valid = true;
             }
             else{
