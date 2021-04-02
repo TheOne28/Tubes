@@ -21,7 +21,7 @@ void move() {
     string direction;
     do {
         // W A S D
-        cout << "Masukkan arah gerak (W) atas, (A) kiri, (S) bawah, (D) kanan : "; // kayak ga pernah main game aja
+        cout << "Masukkan arah gerak (W) atas, (A) kiri, (S) bawah, (D) kanan : "; // Seperti kontrol game pada umumnya
         cin >> direction;
 
         if (direction == "W" || direction == "w"){ //Gerak ke atas
