@@ -1,3 +1,5 @@
+Github link: https://github.com/TheOne28/Tubes.git
+
 1. Deskripsi singkat
 Program ini adalah permainan mengejar dan menembak kecoak yang muncul secara random. User mengejar dan menembak kecoak dengan memasukkan perintah untuk robot pada area yang telah ditentukan.
 Saat permainan diakhiri, akan ditampilkan jumlah kecoak yang berhasil dibunuh.
