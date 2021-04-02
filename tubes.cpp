@@ -15,16 +15,16 @@ struct chara {
 
 chara robot;
 chara cockroach;
-
+//Fungsi gerak
 void move() {
     bool moved = false;
     string direction;
     do {
-        // U D L R
-        cout << "Masukkan arah gerak (U)p (D)own (L)eft (R)ight : ";
+        // W A S D
+        cout << "Masukkan arah gerak (W) atas, (A) kiri, (S) bawah, (D) kanan : "; // Seperti kontrol game pada umumnya
         cin >> direction;
 
-        if (direction == "U" || direction == "u") {
+        if (direction == "W" || direction == "w"){ //Gerak ke atas
             if ((robot.y + 1 == cockroach.y) && (robot.x == cockroach.x)) {
                 cout << "Menabrak kecoak\n";
             }
@@ -36,7 +36,7 @@ void move() {
                 moved = true;
             }
         }
-        else if (direction == "D" || direction == "d") {
+        else if (direction == "S" || direction == "s") { //Gerak ke bawah
             if ((robot.y - 1 == cockroach.y) && (robot.x == cockroach.x)) {
                 cout << "Menabrak kecoak\n";
             }
@@ -48,7 +48,7 @@ void move() {
                 moved = true;
             }
         }
-        else if (direction == "L" || direction == "l") {
+        else if (direction == "A" || direction == "a") { //Gerak ke kiri
             if ((robot.x - 1 == cockroach.x) && (robot.y == cockroach.y)) {
                 cout << "Menabrak kecoak\n";
             }
@@ -60,7 +60,7 @@ void move() {
                 moved = true;
             }
         }
-        else if (direction == "R" || direction == "r") {
+        else if (direction == "D" || direction == "d") { //Gerak ke kanan
             if ((robot.x + 1 == cockroach.x) && (robot.y == cockroach.y)) {
                 cout << "Menabrak kecoak\n";
             }
@@ -77,7 +77,7 @@ void move() {
         }
     } while (!moved);
 }
-
+//Fungsi menembak
 void shoot(int range, int distance) {
     if (distance <= range) {
         cockroach.health -= robot.damage;
@@ -104,8 +104,8 @@ int main() {
             } while (cockroach.x == robot.x && cockroach.y == robot.y);
             cockroach.health = (rand() % 6) + 1;
         }
-        cout << "Posisi Kecoak X,Y : " << cockroach.x << "," << cockroach.y << endl;
-        cout << "Posisi Robot X,Y : " << robot.x << "," << robot.y << endl;
+        cout << "Posisi Kecoak (X,Y) : " << cockroach.x << "," << cockroach.y << endl;
+        cout << "Posisi Robot (X,Y) : " << robot.x << "," << robot.y << endl;
         float distance = sqrt(pow((cockroach.x - robot.x), 2) + pow((cockroach.y - robot.y), 2));
         cockroach.damage = 1;
         // Jarak diasumsikan berupa jarak terdekat yang dapat berupa diagonal
@@ -115,31 +115,42 @@ int main() {
         if (distance <= range) {
             robot.health -= cockroach.damage;
         }
-        cout << "Health Kecoak : " << cockroach.health << "             Health Robot : " << robot.health << endl;
+        cout << "Health Kecoak : " << cockroach.health << "             Health Robot : " << robot.health << "\n"<< endl;
         //Input pertama
         string command;
         bool valid = false;
-        //Gerak = M or m, tembak = S or s
+        //Gerak = M or m, tembak = K or k
         do {
             float distance = sqrt(pow((cockroach.x - robot.x), 2) + pow((cockroach.y - robot.y), 2));
             if (distance <= range) {
                 cout << "Kecoak dalam jarak tembak \n";
             }
-            cout << "Silahkan masukkan komando (M)ove (S)hoot : ";
+            cout << "Silahkan masukkan komando (M)ove (K)ill : ";
             cin >> command;
-            if (command == "M" || command == "m") {
+            if (command == "M" || command == "m") { //Perintah bergerak
                 move();
                 valid = true;
             }
-            else if (command == "S" || command == "s") {
+            else if (command == "K" || command == "k") { //Perintah menembak
                 shoot(range, distance);
-                if (cockroach.health == 0) {
+                if (cockroach.health <= 0) {
                     count++;
                 }
                 valid = true;
             }
-            else if (command == "END") {
+            else if (command == "Q" || command == "q") {
                 finish = true;
+                valid = true;
+            }
+            else if (command == "H" || command == "h"){  //
+                if (robot.health < 10){
+                    robot.health = 10;
+                    robot.x = 0;
+                    robot.y = 0;
+                }
+                else if (robot.health == 10){
+                    cout << "Nyawa robot penuh" << endl;
+                }
                 valid = true;
             }
             else {
